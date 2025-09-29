@@ -1,12 +1,12 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import font
 
 # --- Main Application Class ---
 class GreetingTranslatorApp:
     def __init__(self, master):
         self.master = master
         master.title("Greeting Translator")
-        master.geometry("300x200")  # Set a fixed window size
+        master.geometry("350x300")  # Set window size
 
         # Dictionary of greetings
         self.greetings = {
@@ -16,36 +16,62 @@ class GreetingTranslatorApp:
             "German": "Hallo"
         }
 
+        # Define a larger font for the output
+        self.output_font = font.Font(family="Helvetica", size=14, weight="bold")
+
         # --- Introduction Label ---
-        self.intro_label = tk.Label(master, text="Hello, select a language to see the greeting", padx=10, pady=10)
+        self.intro_label = tk.Label(master, 
+                                    text="Hello, select a language to see the greeting", 
+                                    padx=10, 
+                                    pady=10)
         self.intro_label.pack()
 
-        # --- Button Frame (to organize buttons) ---
+        # --- Button Frame (to organize buttons vertically) ---
+        # This frame holds the buttons in the middle of the window
         self.button_frame = tk.Frame(master)
         self.button_frame.pack(pady=10)
 
-        # --- Create Buttons ---
+        # --- Create Buttons in a vertical list (column style) ---
         self.create_buttons(self.button_frame)
+
+        # -------------------------------------------------------------------
+        # --- Output Display Box (Label at the bottom of the GUI) ---
+        # -------------------------------------------------------------------
+        self.output_label = tk.Label(master,
+                                     
+                                     font=self.output_font,
+                                     bg="#e0e0e0", # Light gray background for the box effect
+                                     fg="#333333", # Dark text color
+                                     width=25, 
+                                     height=2,
+                                     relief=tk.SUNKEN, # Gives a recessed, box-like appearance
+                                     pady=10)
+        self.output_label.pack(pady=20, padx=10)
+
 
     # --- Method to create the language buttons ---
     def create_buttons(self, parent_frame):
+        # The buttons will be stacked vertically because we don't specify a 'side' in pack()
         for language in self.greetings:
-            # Create a button for each language
             button = tk.Button(parent_frame,
                                text=language,
-                               # Use a lambda to pass the language as an argument to the translator function
                                command=lambda lang=language: self.translate_greeting(lang),
-                               width=10)
-            button.pack(side=tk.LEFT, padx=5, pady=5) # Place buttons horizontally
+                               width=15, 
+                               pady=5)
+            # pack() without 'side' ensures buttons stack in a column
+            button.pack(pady=3) 
 
-    # --- Translator Function ---
+
+    # --- Translator Function: Updates the output label ---
     def translate_greeting(self, language):
-        # Get the greeting from the dictionary
         greeting = self.greetings[language]
+        
+        # Update the output label text at the bottom of the GUI
+        new_text = f"{language}: \"{greeting}\""
+        self.output_label.config(text=new_text, fg="#0077b6") # Change text and color
+        
+        print(f"User selected: {language}. Greeting: {greeting}")
 
-        # Display the translated greeting using a message box
-        messagebox.showinfo(f"{language} Greeting", f"The greeting in {language} is:\n\n'{greeting}'")
-        print(f"User selected: {language}. Greeting: {greeting}") # Optional: print to console
 
 # --- Main execution block ---
 if __name__ == "__main__":
