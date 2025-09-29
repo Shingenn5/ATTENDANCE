@@ -4,14 +4,12 @@ from tkinter import font as tkfont
 
 def submit_feedback():
     """
-    Retrieves the text from the input fields and prints it to the console.
+    Retrieves text from input fields, prints it to the console,
+    and then clears the fields for the next entry.
     """
-    # .get() is used for single-line Entry widgets
+    # Get the data from the widgets
     name = name_entry.get()
     email = email_entry.get()
-    
-    # For the multi-line Text widget, we specify the start ('1.0') and end ('end-1c')
-    # '1.0' means line 1, character 0. 'end-1c' gets all text except the final newline.
     feedback = feedback_text.get("1.0", "end-1c")
     
     # Print the collected feedback to the console
@@ -20,6 +18,12 @@ def submit_feedback():
     print(f"Email: {email}")
     print(f"Feedback: {feedback}")
     print("---------------------------\n")
+    
+    # --- NEW: Clear the input fields after submission ---
+    name_entry.delete(0, tk.END)
+    email_entry.delete(0, tk.END)
+    feedback_text.delete("1.0", tk.END)
+    
 
 # --- GUI Setup ---
 
@@ -35,9 +39,7 @@ main_frame.pack(fill="both", expand=True)
 # --- Widgets ---
 
 # 1. Header
-# Create a custom font for the header
 header_font = tkfont.Font(family="Helvetica", size=16, weight="bold")
-
 header_label = ttk.Label(main_frame, text="We'd Love Your Feedback!", font=header_font)
 header_label.grid(row=0, column=0, columnspan=2, pady=10)
 
@@ -57,16 +59,16 @@ email_entry.grid(row=2, column=1, sticky="ew", padx=5, pady=5)
 
 # 4. Feedback Text Box
 feedback_label = ttk.Label(main_frame, text="Feedback:")
-feedback_label.grid(row=3, column=0, sticky="nw", padx=5, pady=5) # 'n' for north alignment
+feedback_label.grid(row=3, column=0, sticky="nw", padx=5, pady=5)
 
 feedback_text = tk.Text(main_frame, width=40, height=8)
 feedback_text.grid(row=3, column=1, sticky="ew", padx=5, pady=5)
 
 # 5. Submit Button
 submit_button = ttk.Button(main_frame, text="Submit", command=submit_feedback)
-submit_button.grid(row=4, column=1, sticky="e", padx=5, pady=15) # 'e' for east alignment
+submit_button.grid(row=4, column=1, sticky="e", padx=5, pady=15)
 
-# Configure column weights to make the entry fields resize with the window
+# Configure column weights for resizing
 main_frame.columnconfigure(1, weight=1)
 
 # --- Start the Application ---
