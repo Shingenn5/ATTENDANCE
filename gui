@@ -1,0 +1,56 @@
+import tkinter as tk
+from tkinter import messagebox
+
+# --- 1. Define the function the button will call ---
+def on_button_click():
+    """
+    This function is executed when the button is pressed.
+    It reads the text from the Entry widget and updates the Label widget.
+    """
+    # Get the text currently in the entry box
+    input_text = text_entry.get()
+
+    if input_text:
+        # Create an output message
+        output_message = f"Hello, {input_text}! The button was pressed."
+        # Update the text of the output label
+        output_label.config(text=output_message)
+    else:
+        # Handle the case where the input box is empty
+        output_label.config(text="Please enter your name in the box above.")
+        # Optional: Show a small pop-up message box
+        # messagebox.showinfo("Info", "Input box is empty.")
+
+
+# --- 2. Initialize the Main Window ---
+root = tk.Tk()
+root.title("My Basic Tkinter App")
+root.geometry("400x200") # Set initial window size (Width x Height)
+
+# --- 3. Create Widgets ---
+
+# A. Input Text Box (Entry)
+# This is where the user types text.
+text_entry = tk.Entry(root, width=40)
+# 'pack' is a simple layout manager to place the widget in the window.
+text_entry.pack(pady=10) # pady adds vertical padding above and below the widget
+text_entry.insert(0, "Enter your name here") # Set default text
+
+# B. Action Button (Button)
+# This button calls the 'on_button_click' function when pressed.
+action_button = tk.Button(
+    root,
+    text="Click Me to Process Input",
+    command=on_button_click # The key line that links the button to the function
+)
+action_button.pack(pady=10)
+
+# C. Output Display (Label)
+# This widget is used to display non-editable text (the program's output).
+output_label = tk.Label(root, text="Waiting for input...", fg="blue")
+output_label.pack(pady=10)
+
+# --- 4. Start the Main Event Loop ---
+# This line is essential. It tells Tkinter to keep the window open
+# and listening for events (like button clicks or key presses).
+root.mainloop()
